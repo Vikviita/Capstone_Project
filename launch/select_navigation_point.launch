@@ -1,0 +1,13 @@
+<launch>
+<arg name="map_file" default ="$(find capstone_project)/maps/map.yaml"/>
+<arg name="rviz_config" default = "$(find capstone_project)/rviz_config/rviz_map_config.rviz"/>
+
+<node name="map_server" pkg="map_server" type="map_server" args = "$(arg map_file)"/>
+
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_config)"/>
+
+<node name="navigation_service_node" pkg = "capstone_project" type = "navigation_service_node.py"/>
+
+<node name="start_navigation_ui_node" pkg="capstone_project" type="start_navigation_ui_node.py"/>
+
+</launch>
