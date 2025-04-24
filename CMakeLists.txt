@@ -56,6 +56,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
   add_service_files(
    FILES
+   NavigationServiceMessage.srv
  )
 
 ## Generate actions in the 'action' folder
@@ -67,6 +68,7 @@ find_package(catkin REQUIRED COMPONENTS
  generate_messages(
   DEPENDENCIES
   std_msgs
+  geometry_msgs
 )
 
 ################################################
