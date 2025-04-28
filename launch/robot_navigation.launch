@@ -1,6 +1,14 @@
 <launch>
 <arg name="map_file" default ="$(find capstone_project)/maps/map.yaml"/>
+<arg name="rviz_config" default = "$(find capstone_project)/rviz/turtlebot3_navigation.rviz"/>
+
+<node name="navigation_service_node" pkg = "capstone_project" type = "navigation_service_node.py"/>
+
+<node name="start_navigation_ui_node" pkg="capstone_project" type="start_navigation_ui_node.py"/>
+
 <include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch">
 <arg name="map_file" value="$(arg map_file)"/>
+<arg name="open_rviz" value = "false"/>
 </include>
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_config)"/>
 </launch>

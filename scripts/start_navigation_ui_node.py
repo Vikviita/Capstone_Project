@@ -2,49 +2,79 @@
 import rospy
 from std_msgs.msg import Empty
 from geometry_msgs.msg import PointStamped
+from geometry_msgs.msg import Point
 import tkinter as tk
 from tkinter import Listbox
 from capstone_project.srv import NavigationServiceMessage,NavigationServiceMessageResponse,NavigationServiceMessageRequest
 
 
 points=[]
-
-def add_point(msg:PointStamped):
-    points.append(msg.point)
-    point = PointStamped()
-    point.header.frame_id = f"map"
-    point.header.stamp = rospy.Time.now()
-    point.point.x = msg.point.x
-    point.point.y = msg.point.y
-    point.point.z = msg.point.z
-    pub.publish(point)
+max_count = 10
+sub = None
 
 def on_button_pressed():
     rospy.loginfo("Start button pressed!")
+    if points.__len__() == 0:
+         rospy.loginfo("List is empty")
+         return
     request = NavigationServiceMessageRequest()
     request.points_array = points
-    service(request)
+    start_button.config(state='disabled')
     sub.unregister()
-    root.destroy()
+    res = service(request)
+    rospy.loginfo(res.message)
+    clear_all_goals()
+    start_button.config(state='normal')
 
 
 def on_shutdown():
     root.destroy()
     
+def clear_all_goals(is_copy:bool = False):
+    i = 1
+    global sub
+    if is_copy:
+        sub.unregister()
+    listbox.insert(tk.END, "Clear all points")
+    while(i<=max_count):
+        rospy.loginfo("deleted")
+        point = PointStamped()
+        point.header.frame_id = f"map"
+        point.header.stamp = rospy.Time.now() + rospy.Duration(i * 0.001)
+        point.point.x = -1000
+        point.point.y = -1000
+        point.point.z = 0
+        pub.publish(point)
+        i+=1
+    if is_copy:
+        for point in points:
+          pointSt = PointStamped()
+          pointSt.header.frame_id = f"map"
+          pointSt.header.stamp = rospy.Time.now() + rospy.Duration(i * 0.001) 
+          pointSt.point = point 
+          pub.publish(pointSt)
+    else:
+        points.clear()
+        rospy.loginfo(f"List size={points.__len__()}")
+        listbox.insert(tk.END, "All points are cleared")
+    sub = rospy.Subscriber("/clicked_point",PointStamped,on_point_clicked)
+    
+
 
 def on_point_clicked(msg:PointStamped):
-    if points.__len__() != 10:
-        point_str = f"({msg.point.x:.2f}, {msg.point.y:.2f}, {msg.point.z:.2f})"
-        rospy.loginfo(f"Clicked: {point_str}")
-        add_point(msg)
-        listbox.insert(tk.END, point_str)
-    else:
-        listbox.insert(tk.END,"MAX")
+        if points.__len__() != max_count:
+            point_str = f"({msg.point.x:.2f}, {msg.point.y:.2f}, {msg.point.z:.2f})"
+            rospy.loginfo(f"Clicked: {point_str}")
+            points.append(msg.point)
+            listbox.insert(tk.END, point_str)
+        else:
+            clear_all_goals(is_copy=True)
+            listbox.insert(tk.END,"MAX")
 
 if __name__ == '__main__':
     rospy.init_node('start_button_node', anonymous=True)
     sub = rospy.Subscriber("/clicked_point",PointStamped,on_point_clicked)
-    pub = rospy.Publisher("/point_stamped",PointStamped,queue_size=20)
+    pub = rospy.Publisher("/clicked_point",PointStamped)
     service = rospy.ServiceProxy("navigation_service",NavigationServiceMessage)
     
 
