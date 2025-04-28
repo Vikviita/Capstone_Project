@@ -14,14 +14,13 @@ Panels:
         - /Local Map1/Planner1
         - /PointStamped1
       Splitter Ratio: 0.5
-    Tree Height: 1406
+    Tree Height: 270
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
     Expanded:
-      - /2D Pose Estimate1
-      - /2D Nav Goal1
       - /Publish Point1
+      - /2D Pose Estimate1
     Name: Tool Properties
     Splitter Ratio: 0.5886790156364441
   - Class: rviz/Views
@@ -335,18 +334,14 @@ Visualization Manager:
     Frame Rate: 30
   Name: root
   Tools:
-    - Class: rviz/Interact
-      Hide Inactive Objects: true
-    - Class: rviz/SetInitialPose
-      Theta std deviation: 0.2617993950843811
-      Topic: /initialpose
-      X std deviation: 0.5
-      Y std deviation: 0.5
-    - Class: rviz/SetGoal
-      Topic: /move_base_simple/goal
     - Class: rviz/PublishPoint
       Single click: true
       Topic: /clicked_point
+    - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
+      Topic: initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
   Value: true
   Views:
     Current:
