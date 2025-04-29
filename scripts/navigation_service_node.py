@@ -25,7 +25,7 @@ def send_goal(x, y):
 
     goal.target_pose.pose.position.x = x
     goal.target_pose.pose.position.y = y
-    goal.target_pose.pose.orientation.w = 1.0
+    goal.target_pose.pose.orientation.w = 0.2
 
     client.send_goal(goal)
     client.wait_for_result()
