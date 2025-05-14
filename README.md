@@ -3,10 +3,10 @@
 This project modify navigation packet for robot Turtlebot 3
 
 ## Dependencies
-ROS NOETIC
-TURTLEBOT 3
-UBUNTU 20.04
-Turtlebot3_navigation package
+- ROS NOETIC
+- TURTLEBOT 3
+- UBUNTU 20.04
+- Turtlebot3_navigation package
 
 ## Run instruction
 1. install this package to your Catkin workspace
